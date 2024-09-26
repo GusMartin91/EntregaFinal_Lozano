@@ -17,10 +17,13 @@ class UserService {
     }
 
     static async refreshToken(refreshToken) {
-        const user = jwt.verify(refreshToken, envs.JWT_REFRESH_SECRET);
-        const newAccessToken = jwt.sign({ user }, envs.JWT_SECRET, { expiresIn: '1h' });
-
-        return { message: 'Token refreshed successfully', accessToken: newAccessToken };
+        try {
+            const user = jwt.verify(refreshToken, envs.JWT_REFRESH_SECRET);
+            const newAccessToken = jwt.sign({ user }, envs.JWT_SECRET, { expiresIn: '1h' });
+            return { message: 'Token refreshed successfully', accessToken: newAccessToken };
+        } catch (error) {
+            throw new Error('Invalid refresh token');
+        }
     }
 
     static async register(email, password) {

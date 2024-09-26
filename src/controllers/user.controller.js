@@ -3,20 +3,33 @@ import UserService from '../services/user.service.js';
 
 class UserController {
     static async login(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.badrequest(errors.array());
+        }
+
         const { email, password } = req.body;
         try {
-            const result = await UserService.login(email, password);
-            return res.success(result);
+            const { message, accessToken, refreshToken, user } = await UserService.login(email, password);
+            res.cookie('UserCookie', accessToken, { httpOnly: true });
+            res.cookie('RefreshToken', refreshToken, { httpOnly: true });
+            return res.success({ message, user });
         } catch (error) {
             return res.internalerror(error.message);
         }
     }
 
     static async refreshToken(req, res) {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.badrequest(errors.array());
+        }
+
         const refreshToken = req.cookies.RefreshToken;
         try {
-            const result = await UserService.refreshToken(refreshToken);
-            return res.success(result);
+            const { message, accessToken } = await UserService.refreshToken(refreshToken);
+            res.cookie('UserCookie', accessToken, { httpOnly: true });
+            return res.success({ message });
         } catch (error) {
             return res.unauthorized(error.message);
         }
@@ -38,13 +51,13 @@ class UserController {
     }
 
     static async update(req, res) {
-        const { email, password } = req.body;
-        const userId = req.user._id;
-
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
             return res.badrequest(errors.array());
         }
+
+        const { email, password } = req.body;
+        const userId = req.user._id;
 
         try {
             const result = await UserService.update(userId, email, password);
@@ -55,7 +68,6 @@ class UserController {
     }
 
     static logout(req, res) {
-        UserService.logout();
         res.clearCookie('UserCookie');
         res.clearCookie('RefreshToken');
         return res.success('Logged out successfully');
