@@ -41,9 +41,9 @@ class UserController {
             return res.badrequest(errors.array());
         }
 
-        const { email, password } = req.body;
+        const { first_name, last_name, email, password, age } = req.body;
         try {
-            const result = await UserService.register(email, password);
+            const result = await UserService.register(first_name, last_name, email, password, age);
             return res.success(result);
         } catch (error) {
             return res.internalerror(error.message);
@@ -56,11 +56,11 @@ class UserController {
             return res.badrequest(errors.array());
         }
 
-        const { email, password } = req.body;
+        const { first_name, last_name, email, password, age } = req.body;
         const userId = req.user._id;
 
         try {
-            const result = await UserService.update(userId, email, password);
+            const result = await UserService.update(userId, first_name, last_name, email, password, age);
             return res.success(result);
         } catch (error) {
             return res.internalerror(error.message);
@@ -74,7 +74,10 @@ class UserController {
     }
 
     static getCurrentUser(req, res) {
-        return res.success(req.user);
+        const user = { ...req.user._doc };
+        delete user.password;
+
+        return res.success(user);
     }
 }
 

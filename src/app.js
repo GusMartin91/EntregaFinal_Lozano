@@ -9,9 +9,6 @@ import { UserRouter } from './routes/userRouter.js';
 import { ProductRouter } from './routes/productRouter.js';
 import { CartRouter } from './routes/cartRouter.js';
 
-
-
-
 const app = express();
 const userRouter = new UserRouter();
 const productRouter = new ProductRouter();

@@ -2,6 +2,7 @@ import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UsersDAO from '../daos/usersDAO.js';
 import { config } from '../config/envs.config.js';
+import CartService from './CartService.js';
 
 class UserService {
     static async login(email, password) {
@@ -26,23 +27,35 @@ class UserService {
         }
     }
 
-    static async register(email, password) {
+    static async register(first_name, last_name, email, password, age) {
         const existingUser = await UsersDAO.getUserByEmail(email);
         if (existingUser) {
             throw new Error('Email already in use');
         }
 
         const hashedPassword = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
-        const newUser = { email, password: hashedPassword };
+
+        const newCart = await CartService.createCart();
+        const newUser = {
+            first_name,
+            last_name,
+            email,
+            password: hashedPassword,
+            age,
+            cart: newCart._id
+        };
 
         const createdUser = await UsersDAO.createUser(newUser);
         return { message: 'User registered successfully', user: createdUser };
     }
 
-    static async update(userId, email, password) {
+    static async update(userId, first_name, last_name, email, password, age) {
         const updateData = {};
+        if (first_name) updateData.first_name = first_name;
+        if (last_name) updateData.last_name = last_name;
         if (email) updateData.email = email;
         if (password) updateData.password = bcrypt.hashSync(password, bcrypt.genSaltSync(10));
+        if (age) updateData.age = age;
 
         const updatedUser = await UsersDAO.updateUserById(userId, updateData);
         return { message: 'User updated successfully', user: updatedUser };
