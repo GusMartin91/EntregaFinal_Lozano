@@ -1,13 +1,21 @@
-import mongoose from 'mongoose';
-import envs from "./envs.config.js";
+import mongoose from "mongoose";
 
-export const connectMongoDB = async () => {
-    try {
-        await mongoose.connect(envs.MONGO_URL)
-            .then(() => console.log("Successfully connected to the database using Mongoose!!"))
-            .catch((err) => console.log(err))
-    } catch (error) {
-        console.error("Could not connect to the database using Mongoose: " + error);
-        process.exit();
+export class MongoDB {
+    static #connection = null;
+
+    static async connect(url, db) {
+        if (this.#connection) {
+            console.log(`Connection already established`);
+            return this.#connection;
+        }
+
+        try {
+            this.#connection = await mongoose.connect(url, { dbName: db });
+            console.log(`Database connection successfully established`);
+            return this.#connection;
+        } catch (error) {
+            console.error(`Failed to connect to the database: ${error}`);
+            process.exit(1);
+        }
     }
 }

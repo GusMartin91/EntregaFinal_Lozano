@@ -1,5 +1,5 @@
 import jwt from "jsonwebtoken";
-import envs from "../config/envs.config.js";
+import { config } from "../config/envs.config.js";
 
 export const auth = (permisos = []) => {
     return (req, res, next) => {
@@ -20,7 +20,7 @@ export const auth = (permisos = []) => {
         let usuario;
 
         try {
-            usuario = jwt.verify(token, envs.JWT_SECRET);
+            usuario = jwt.verify(token, config.JWT_SECRET);
         } catch (error) {
             return res.unauthorized(error.message);
         }

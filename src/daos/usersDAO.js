@@ -1,18 +1,19 @@
-import usersModel from "./models/user.model.js";
+import userModel from "./models/userModel.js";
 
 class UsersDAO {
     async createUser(userData) {
         try {
-            const newUser = await usersModel.create(userData);
+            const newUser = await userModel.create(userData);
             return newUser;
         } catch (error) {
             throw new Error(`Error creating user: ${error.message}`);
         }
+
     }
 
     async getUserById(userId) {
         try {
-            const user = await usersModel.findById(userId);
+            const user = await userModel.findById(userId);
             if (!user) {
                 throw new Error('User not found');
             }
@@ -24,7 +25,7 @@ class UsersDAO {
 
     async getUserByEmail(email) {
         try {
-            const user = await usersModel.findOne({ email });
+            const user = await userModel.findOne({ email });
             return user;
         } catch (error) {
             throw new Error(`Error finding user by email: ${error.message}`);
@@ -33,7 +34,7 @@ class UsersDAO {
 
     async updateUserById(userId, updateData) {
         try {
-            const updatedUser = await usersModel.findByIdAndUpdate(userId, updateData, { new: true });
+            const updatedUser = await userModel.findByIdAndUpdate(userId, updateData, { new: true });
             if (!updatedUser) {
                 throw new Error('User not found');
             }
@@ -45,7 +46,7 @@ class UsersDAO {
 
     async deleteUserById(userId) {
         try {
-            const deletedUser = await usersModel.findByIdAndDelete(userId);
+            const deletedUser = await userModel.findByIdAndDelete(userId);
             if (!deletedUser) {
                 throw new Error('User not found');
             }

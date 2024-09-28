@@ -1,15 +1,21 @@
 import express from "express";
 import cookieParser from "cookie-parser"
 import __dirname from "./utils.js";
-import { connectMongoDB } from "./config/mongoDB.config.js";
-import envs from "./config/envs.config.js";
+import { MongoDB } from "./config/mongoDB.config.js";
+import { config } from "./config/envs.config.js";
 import passport from 'passport';
 import { iniciarPassport } from './config/passport.config.js';
-import { UsersRouter } from './routes/usersRouter.js';
+import { UserRouter } from './routes/userRouter.js';
+import { ProductRouter } from './routes/productRouter.js';
+import { CartRouter } from './routes/cartRouter.js';
+
+
+
 
 const app = express();
-const usersRouter = new UsersRouter();
-connectMongoDB();
+const userRouter = new UserRouter();
+const productRouter = new ProductRouter();
+const cartRouter = new CartRouter();
 
 app.use(cookieParser())
 app.use(express.json());
@@ -19,8 +25,12 @@ app.use(express.static("./src/public"))
 iniciarPassport()
 
 app.use(passport.initialize())
-app.use("/api/users", usersRouter.getRouter());
+app.use("/api/users", userRouter.getRouter());
+app.use('/api/products', productRouter.getRouter());
+app.use('/api/carts', cartRouter.getRouter());
 
-const httpServer = app.listen(envs.PORT, () => {
-    console.log(`Server listening on port: ${envs.PORT}`);
+const httpServer = app.listen(config.PORT, () => {
+    console.log(`Server listening on port: ${config.PORT}`);
 });
+
+await MongoDB.connect(config.MONGO_URL, config.MONGO_DB);

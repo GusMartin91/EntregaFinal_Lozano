@@ -1,7 +1,7 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
 import UsersDAO from '../daos/usersDAO.js';
-import envs from '../config/envs.config.js';
+import { config } from '../config/envs.config.js';
 
 class UserService {
     static async login(email, password) {
@@ -10,16 +10,16 @@ class UserService {
             throw new Error('Invalid email or password');
         }
 
-        const accessToken = jwt.sign({ user }, envs.JWT_SECRET, { expiresIn: '1h' });
-        const refreshToken = jwt.sign({ user }, envs.JWT_REFRESH_SECRET, { expiresIn: '7d' });
+        const accessToken = jwt.sign({ user }, config.JWT_SECRET, { expiresIn: '1h' });
+        const refreshToken = jwt.sign({ user }, config.JWT_REFRESH_SECRET, { expiresIn: '7d' });
 
         return { message: 'Login successful', accessToken, refreshToken, user };
     }
 
     static async refreshToken(refreshToken) {
         try {
-            const user = jwt.verify(refreshToken, envs.JWT_REFRESH_SECRET);
-            const newAccessToken = jwt.sign({ user }, envs.JWT_SECRET, { expiresIn: '1h' });
+            const user = jwt.verify(refreshToken, config.JWT_REFRESH_SECRET);
+            const newAccessToken = jwt.sign({ user }, config.JWT_SECRET, { expiresIn: '1h' });
             return { message: 'Token refreshed successfully', accessToken: newAccessToken };
         } catch (error) {
             throw new Error('Invalid refresh token');

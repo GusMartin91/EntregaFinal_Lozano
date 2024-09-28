@@ -1,6 +1,6 @@
 import passport from "passport";
 import passportJWT from "passport-jwt";
-import envs from "./envs.config.js";
+import { config } from "./envs.config.js";
 import UsersDAO from "../daos/usersDAO.js";
 
 const JwtStrategy = passportJWT.Strategy;
@@ -21,7 +21,7 @@ export const iniciarPassport = () => {
         "jwt",
         new JwtStrategy(
             {
-                secretOrKey: envs.JWT_SECRET,
+                secretOrKey: config.JWT_SECRET,
                 jwtFromRequest: ExtractJwt.fromExtractors([buscarToken])
             },
             async (payload, done) => {
