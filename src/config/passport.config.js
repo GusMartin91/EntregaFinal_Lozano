@@ -1,7 +1,7 @@
 import passport from "passport";
 import passportJWT from "passport-jwt";
 import { config } from "./envs.config.js";
-import UsersDAO from "../daos/usersDAO.js";
+import UsersDAO from "../daos/UsersDAO.js";
 
 const JwtStrategy = passportJWT.Strategy;
 const ExtractJwt = passportJWT.ExtractJwt;

@@ -1,6 +1,6 @@
 import bcrypt from 'bcrypt';
 import jwt from 'jsonwebtoken';
-import UsersDAO from '../daos/usersDAO.js';
+import UsersDAO from '../daos/UsersDAO.js';
 import { config } from '../config/envs.config.js';
 import CartService from './CartService.js';
 
