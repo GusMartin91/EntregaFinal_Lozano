@@ -1,3 +1,4 @@
+import mongoose from "mongoose";
 import CartsDAO from '../daos/CartsDAO.js';
 
 class CartService {
@@ -6,11 +7,20 @@ class CartService {
     }
 
     async getCartById(cartId) {
-        return await CartsDAO.getCartById(cartId);
+        if (!mongoose.Types.ObjectId.isValid(cartId)) {
+            return null;
+        }
+
+        const cart = await CartsDAO.getCartById(cartId);
+
+        return cart || null;
     }
 
     async addProductToCart(cartId, productId, quantity) {
         const cart = await CartsDAO.getCartById(cartId);
+
+        if (!cart) return null;
+
         const productIndex = cart.products.findIndex(p => p.product._id.toString() === productId);
 
         if (productIndex >= 0) {
@@ -24,6 +34,7 @@ class CartService {
 
     async removeProductFromCart(cartId, productId) {
         const cart = await CartsDAO.getCartById(cartId);
+        if (!cart) return null;
         cart.products = cart.products.filter(p => p.product._id.toString() !== productId);
 
         return await CartsDAO.updateCart(cartId, cart.products);

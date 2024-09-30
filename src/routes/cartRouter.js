@@ -13,17 +13,17 @@ export class CartRouter extends CustomRouter {
         );
 
         this.get(
-            '/:id',
+            '/:cartId',
             ['user', 'admin'],
             passportCall('jwt'),
-            param('id').isMongoId().withMessage('Invalid cart ID'),
+            param('cartId').isMongoId().withMessage('Invalid cart ID'),
             this.validateRequest,
-            CartController.getCart
+            CartController.getCartById
         );
 
         this.post(
             '/:cartId/products/:productId',
-            ['user'],
+            ['user','admin'],
             passportCall('jwt'),
             [
                 param('cartId').isMongoId().withMessage('Invalid cart ID'),
@@ -32,6 +32,15 @@ export class CartRouter extends CustomRouter {
             ],
             this.validateRequest,
             CartController.addProduct
+        );
+
+        this.post(
+            '/:cartId/purchase',
+            ['user', 'admin'],
+            passportCall('jwt'),
+            param('cartId').isMongoId().withMessage('Invalid cart ID'),
+            this.validateRequest,
+            CartController.purchaseCart
         );
 
         this.delete(

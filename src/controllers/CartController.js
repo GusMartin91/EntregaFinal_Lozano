@@ -10,9 +10,9 @@ class CartController {
         }
     }
 
-    static async getCart(req, res) {
+    static async getCartById(req, res) {
         try {
-            const cartId = req.params.id;
+            const cartId = req.params.cartId;
             const cart = await CartService.getCartById(cartId);
             return res.success(cart);
         } catch (error) {
@@ -56,6 +56,17 @@ class CartController {
             const { cartId } = req.params;
             await CartService.deleteCart(cartId);
             return res.success({ message: 'Cart deleted successfully' });
+        } catch (error) {
+            return res.internalerror(error.message);
+        }
+    }
+
+    static async purchaseCart(req, res) {
+        try {
+            const cartId = req.params.cartId;
+            const cart = await CartService.getCartById(cartId);
+
+            return cart ? res.success(cart) : res.notfound("Cart not found");
         } catch (error) {
             return res.internalerror(error.message);
         }

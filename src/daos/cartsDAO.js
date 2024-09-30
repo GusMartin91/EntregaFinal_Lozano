@@ -13,10 +13,8 @@ class CartsDAO {
     async getCartById(cartId) {
         try {
             const cart = await cartsModel.findById(cartId).populate('products.product');
-            if (!cart) {
-                throw new Error('Cart not found');
-            }
-            return cart;
+
+            return cart || null;
         } catch (error) {
             throw new Error(`Error finding cart: ${error.message}`);
         }

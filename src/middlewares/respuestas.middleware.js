@@ -20,6 +20,11 @@ export const misRespuestas = (req, res, next) => {
         status: "forbidden",
         error
     });
+    
+    res.notfound = (error) => res.status(404).json({
+        status: "Not Found",
+        error
+    });
 
     res.internalerror = (error) => res.status(500).json({
         status: "Internal server error",
