@@ -29,10 +29,19 @@ class CartService {
             cart.products.push({ product: productId, quantity });
         }
 
-        return await CartsDAO.updateCart(cartId, cart.products, session);
+        if (cart.products.length > 0) {
+            if (!session) {
+                return await CartsDAO.updateCart(cartId, cart.products);
+            }
+            return await CartsDAO.updateCart(cartId, cart.products, session);
+        }
+        return null;
     }
 
     async updateCart(cartId, cart, session = null) {
+        if (!session) {
+            return await CartsDAO.updateCart(cartId, cart.products);
+        }
         return await CartsDAO.updateCart(cartId, cart.products, session);
     }
 
@@ -41,17 +50,29 @@ class CartService {
         if (!cart) return null;
         cart.products = cart.products.filter(p => p.product._id.toString() !== productId);
 
-        return await CartsDAO.updateCart(cartId, cart.products, session = null);
+        if (!session) {
+            return await CartsDAO.updateCart(cartId, cart.products);
+        }
+        return await CartsDAO.updateCart(cartId, cart.products, session);
     }
 
     async clearCart(cartId, session = null) {
-        return await CartsDAO.updateCart(cartId, [], session = null);
+        if (!session) {
+            return await CartsDAO.updateCart(cartId, [], session);
+        }
+        return await CartsDAO.updateCart(cartId, [], session);
     }
     async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
+        if (!session) {
+            return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount, details);
+        }
         return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session);
     }
 
     async deleteCart(cartId, session = null) {
+        if (!session) {
+            return await CartsDAO.deleteCart(cartId);
+        }
         return await CartsDAO.deleteCart(cartId, session);
     }
 }

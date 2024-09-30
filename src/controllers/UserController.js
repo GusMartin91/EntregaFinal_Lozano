@@ -1,5 +1,6 @@
 import { validationResult } from 'express-validator';
 import UserService from '../services/UserService.js';
+import UserDTO from '../dtos/UserDTO.js';
 
 class UserController {
     static async login(req, res) {
@@ -74,10 +75,8 @@ class UserController {
     }
 
     static getCurrentUser(req, res) {
-        const user = { ...req.user._doc };
-        delete user.password;
-
-        return res.success(user);
+        const userDTO = new UserDTO(req.user);
+        return res.success(userDTO);
     }
 }
 

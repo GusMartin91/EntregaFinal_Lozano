@@ -23,7 +23,7 @@ export class CartRouter extends CustomRouter {
 
         this.post(
             '/:cartId/products/:productId',
-            ['user','admin'],
+            ['user'],
             passportCall('jwt'),
             [
                 param('cartId').isMongoId().withMessage('Invalid cart ID'),

@@ -4,8 +4,8 @@ import { ticketModel } from './models/ticketModel.js';
 class CartsDAO {
     async createCart(session = null) {
         try {
-            const newCart = await cartsModel.create({ products: [] }, session ? { session } : {});
-            return newCart;
+            const newCart = await cartsModel.create([{ products: [] }], session ? { session } : {});
+            return newCart[0];
         } catch (error) {
             throw new Error(`Error creating cart: ${error.message}`);
         }
@@ -38,7 +38,15 @@ class CartsDAO {
 
     async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
         try {
-            return await ticketModel.create({ ticketNumber, date, buyerEmail, totalAmount, details }, session ? { session } : {});
+            const ticketData = {
+                ticketNumber,
+                date,
+                buyerEmail,
+                totalAmount,
+                details
+            };
+
+            return await ticketModel.create([ticketData], session ? { session } : {});
         } catch (error) {
             throw new Error(`Error creating ticket: ${error.message}`);
         }
