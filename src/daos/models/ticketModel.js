@@ -4,7 +4,7 @@ export const ticketModel = mongoose.model(
     "tickets",
     new mongoose.Schema(
         {
-            ticketNumber: String,
+            ticketNumber: Number,
             date: Date,
             buyerEmail: String,
             totalAmount: Number,

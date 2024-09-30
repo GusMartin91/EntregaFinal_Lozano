@@ -5,8 +5,8 @@ class ProductService {
         return await ProductsDAO.createProduct(productData);
     }
 
-    static async updateProduct(productId, updateData) {
-        return await ProductsDAO.updateProductById(productId, updateData);
+    static async updateProduct(productId, updateData, session = null) {
+        return await ProductsDAO.updateProductById(productId, updateData, session);
     }
 
     static async deleteProduct(productId) {

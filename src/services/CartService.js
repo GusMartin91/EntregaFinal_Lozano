@@ -2,8 +2,8 @@ import mongoose from "mongoose";
 import CartsDAO from '../daos/CartsDAO.js';
 
 class CartService {
-    async createCart() {
-        return await CartsDAO.createCart();
+    async createCart(session = null) {
+        return await CartsDAO.createCart(session);
     }
 
     async getCartById(cartId) {
@@ -16,7 +16,7 @@ class CartService {
         return cart || null;
     }
 
-    async addProductToCart(cartId, productId, quantity) {
+    async addProductToCart(cartId, productId, quantity, session = null) {
         const cart = await CartsDAO.getCartById(cartId);
 
         if (!cart) return null;
@@ -29,31 +29,30 @@ class CartService {
             cart.products.push({ product: productId, quantity });
         }
 
-        return await CartsDAO.updateCart(cartId, cart.products);
-    }
-    async updateCart(cartId, cart) {
-        return await CartsDAO.updateCart(cartId, cart.products);
+        return await CartsDAO.updateCart(cartId, cart.products, session);
     }
 
-    async removeProductFromCart(cartId, productId) {
+    async updateCart(cartId, cart, session = null) {
+        return await CartsDAO.updateCart(cartId, cart.products, session);
+    }
+
+    async removeProductFromCart(cartId, productId, session = null) {
         const cart = await CartsDAO.getCartById(cartId);
         if (!cart) return null;
         cart.products = cart.products.filter(p => p.product._id.toString() !== productId);
 
-        return await CartsDAO.updateCart(cartId, cart.products);
+        return await CartsDAO.updateCart(cartId, cart.products, session = null);
     }
 
-    async clearCart(cartId) {
-        return await CartsDAO.updateCart(cartId, []);
+    async clearCart(cartId, session = null) {
+        return await CartsDAO.updateCart(cartId, [], session = null);
     }
-    async createTicket(ticketNumber, date, buyerEmail, totalAmount,
-        details) {
-        return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount,
-            details);
+    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
+        return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session);
     }
 
-    async deleteCart(cartId) {
-        return await CartsDAO.deleteCart(cartId);
+    async deleteCart(cartId, session = null) {
+        return await CartsDAO.deleteCart(cartId, session);
     }
 }
 

@@ -10,9 +10,14 @@ class ProductsDAO {
         }
     }
 
-    async updateProductById(productId, updateData) {
+    async updateProductById(productId, updateData, session = null) {
         try {
-            const updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true });
+            let updatedProduct = null
+            if (session) {
+                updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true }).session(session);
+            } else {
+                updatedProduct = await productModel.findByIdAndUpdate(productId, updateData, { new: true });
+            }
             if (!updatedProduct) {
                 throw new Error('Product not found');
             }

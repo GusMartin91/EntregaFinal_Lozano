@@ -2,9 +2,9 @@ import { cartsModel } from './models/cartModel.js';
 import { ticketModel } from './models/ticketModel.js';
 
 class CartsDAO {
-    async createCart() {
+    async createCart(session = null) {
         try {
-            const newCart = await cartsModel.create({ products: [] });
+            const newCart = await cartsModel.create({ products: [] }, session ? { session } : {});
             return newCart;
         } catch (error) {
             throw new Error(`Error creating cart: ${error.message}`);
@@ -21,9 +21,12 @@ class CartsDAO {
         }
     }
 
-    async updateCart(cartId, updatedProducts) {
+    async updateCart(cartId, updatedProducts, session = null) {
         try {
-            const updatedCart = await cartsModel.findByIdAndUpdate(cartId, { products: updatedProducts }, { new: true });
+            const options = { new: true };
+            if (session) options.session = session;
+
+            const updatedCart = await cartsModel.findByIdAndUpdate(cartId, { products: updatedProducts }, options);
             if (!updatedCart) {
                 throw new Error('Cart not found');
             }
@@ -33,20 +36,23 @@ class CartsDAO {
         }
     }
 
-    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details) {
+    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
         try {
-            return await ticketModel.create(ticketNumber, date, buyerEmail, totalAmount, details);
+            return await ticketModel.create({ ticketNumber, date, buyerEmail, totalAmount, details }, session ? { session } : {});
         } catch (error) {
             throw new Error(`Error creating ticket: ${error.message}`);
         }
     }
 
-    async deleteCart(cartId) {
+    async deleteCart(cartId, session = null) {
         try {
-            const deletedCart = await cartsModel.findByIdAndDelete(cartId);
+            const options = session ? { session } : {};
+            const deletedCart = await cartsModel.findByIdAndDelete(cartId, options);
+
             if (!deletedCart) {
                 throw new Error('Cart not found');
             }
+
             return deletedCart;
         } catch (error) {
             throw new Error(`Error deleting cart: ${error.message}`);
