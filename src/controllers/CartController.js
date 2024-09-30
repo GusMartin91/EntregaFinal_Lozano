@@ -125,13 +125,13 @@ class CartController {
                 return res.badrequest("No items available for purchase.")
             }
 
-            let totalAmount = availableProducts.reduce((acum, item) => acum += item.quantity * item.product.price, 0)
-            let ticketNumber = Date.now()
+            let amount = availableProducts.reduce((acum, item) => acum += item.quantity * item.product.price, 0)
+            let code = Date.now()
             let date = new Date()
-            let buyerEmail = req.user.email
+            let purchaser = req.user.email
             let details = availableProducts
             const ticket = await CartService.createTicket(
-                ticketNumber, date, buyerEmail, totalAmount, details, session);
+                code, purchase_datetime, purchaser, amount, details, session);
 
             await CartService.updateCart(cartId, cart, session);
 

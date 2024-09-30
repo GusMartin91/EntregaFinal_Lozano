@@ -62,11 +62,11 @@ class CartService {
         }
         return await CartsDAO.updateCart(cartId, [], session);
     }
-    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
+    async createTicket(code, purchase_datetime, purchaser, amount, details, session = null) {
         if (!session) {
-            return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount, details);
+            return await CartsDAO.createTicket(code, purchase_datetime, purchaser, amount, details);
         }
-        return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session);
+        return await CartsDAO.createTicket(code, purchase_datetime, purchaser, amount, details, session);
     }
 
     async deleteCart(cartId, session = null) {

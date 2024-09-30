@@ -36,13 +36,13 @@ class CartsDAO {
         }
     }
 
-    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details, session = null) {
+    async createTicket(code, purchase_datetime, purchaser, amount, details, session = null) {
         try {
             const ticketData = {
-                ticketNumber,
+                code,
                 date,
-                buyerEmail,
-                totalAmount,
+                purchaser,
+                amount,
                 details
             };
 
