@@ -31,6 +31,9 @@ class CartService {
 
         return await CartsDAO.updateCart(cartId, cart.products);
     }
+    async updateCart(cartId, cart) {
+        return await CartsDAO.updateCart(cartId, cart.products);
+    }
 
     async removeProductFromCart(cartId, productId) {
         const cart = await CartsDAO.getCartById(cartId);
@@ -42,6 +45,11 @@ class CartService {
 
     async clearCart(cartId) {
         return await CartsDAO.updateCart(cartId, []);
+    }
+    async createTicket(ticketNumber, date, buyerEmail, totalAmount,
+        details) {
+        return await CartsDAO.createTicket(ticketNumber, date, buyerEmail, totalAmount,
+            details);
     }
 
     async deleteCart(cartId) {

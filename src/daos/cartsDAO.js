@@ -32,6 +32,14 @@ class CartsDAO {
         }
     }
 
+    async createTicket(ticketNumber, date, buyerEmail, totalAmount, details) {
+        try {
+            return await ticketModel.create(ticketNumber, date, buyerEmail, totalAmount, details);
+        } catch (error) {
+            throw new Error(`Error creating ticket: ${error.message}`);
+        }
+    }
+
     async deleteCart(cartId) {
         try {
             const deletedCart = await cartsModel.findByIdAndDelete(cartId);
