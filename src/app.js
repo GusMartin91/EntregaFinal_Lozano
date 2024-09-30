@@ -22,7 +22,7 @@ app.use(express.static("./src/public"))
 iniciarPassport()
 
 app.use(passport.initialize())
-app.use("/api/users", userRouter.getRouter());
+app.use("/api/sessions", userRouter.getRouter());
 app.use('/api/products', productRouter.getRouter());
 app.use('/api/carts', cartRouter.getRouter());
 

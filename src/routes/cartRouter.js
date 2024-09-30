@@ -22,7 +22,7 @@ export class CartRouter extends CustomRouter {
         );
 
         this.post(
-            '/:cartId/products/:productId',
+            '/:cartId/product/:productId',
             ['user'],
             passportCall('jwt'),
             [

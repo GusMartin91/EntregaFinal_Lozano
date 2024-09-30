@@ -5,7 +5,7 @@ import { passportCall } from '../utils.js';
 
 export class ProductRouter extends CustomRouter {
     init() {
-        this.post('/create', ['admin'], passportCall('jwt'), [
+        this.post('/', ['admin'], passportCall('jwt'), [
             body('title').notEmpty().withMessage('Title is required'),
             body('code').notEmpty().withMessage('Code is required'),
             body('price').isFloat({ gt: 0 }).withMessage('Price must be a positive number'),
@@ -20,7 +20,7 @@ export class ProductRouter extends CustomRouter {
 
         this.delete('/delete/:id', ['admin'], passportCall('jwt'), ProductController.deleteProduct);
 
-        this.get('/all', ['public'], ProductController.getAllProducts);
+        this.get('/', ['public'], ProductController.getAllProducts);
         this.get('/:id', ['public'], ProductController.getProductById);
     }
 }

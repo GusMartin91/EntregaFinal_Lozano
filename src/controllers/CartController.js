@@ -127,7 +127,7 @@ class CartController {
 
             let amount = availableProducts.reduce((acum, item) => acum += item.quantity * item.product.price, 0)
             let code = Date.now()
-            let date = new Date()
+            let purchase_datetime = new Date()
             let purchaser = req.user.email
             let details = availableProducts
             const ticket = await CartService.createTicket(

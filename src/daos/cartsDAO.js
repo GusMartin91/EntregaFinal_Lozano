@@ -40,7 +40,7 @@ class CartsDAO {
         try {
             const ticketData = {
                 code,
-                date,
+                purchase_datetime,
                 purchaser,
                 amount,
                 details
