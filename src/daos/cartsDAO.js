@@ -1,3 +1,4 @@
+import { sendTicketEmail } from '../nodemailer.js';
 import { cartsModel } from './models/cartModel.js';
 import { ticketModel } from './models/ticketModel.js';
 
@@ -45,8 +46,11 @@ class CartsDAO {
                 amount,
                 details
             };
+            const createdTicket = await ticketModel.create([ticketData], session ? { session } : {});
 
-            return await ticketModel.create([ticketData], session ? { session } : {});
+            await sendTicketEmail(purchaser, createdTicket[0]);
+
+            return createdTicket[0];
         } catch (error) {
             throw new Error(`Error creating ticket: ${error.message}`);
         }
